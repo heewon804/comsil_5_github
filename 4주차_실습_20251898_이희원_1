@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DATAFILE="$HOME/mydata"
+
+if [ $# -eq 0 ]; then
+    echo "Usage: phone searchfor [...searchfor]"
+    echo "(You didn't tell me what you want to search for.)"
+    exit 1
+fi
+
+pattern=""
+for arg in "$@"
+do
+    if [ "$arg" = "|" ]; then
+        continue
+    fi
+
+    if [ -z "$pattern" ]; then
+        pattern="$arg"
+    else
+        pattern="$pattern|$arg"
+    fi
+done
+
+egrep "$pattern" "$DATAFILE" | awk -f display.awk
